@@ -87,10 +87,14 @@ fn main(){
                        Color        ("#a705b0"),
                        LineWidth    (0.5)]);
             // show the plot
-            fg.show().unwrap();
-            // problematic for the lsp
-            // examine the BUG
-            // fg.save_to_png("try-to-save-gnuplot.png", 800, 600);
+            // fg.show().unwrap();
+            let f_type = ".png";
+            let save_to_file = format!(
+                "{}{}", comp_air_folder, f_type)
+                .replace(" ", "_")
+                .replace("/","");
+            // save to parent "project" folder
+            // fg.save_to_png(save_to_file, 800, 600);
             }
             _i += 1;
         }
