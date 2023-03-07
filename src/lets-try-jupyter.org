@@ -1,0 +1,42 @@
+* this is a demo i found on the net
+#+begin_src jupyter-rust :session cargo :async yes
+
+
+            // NO NEED FOR "FOR LOOPS" !!!
+            // HACK ABOVE !~!!!!!
+            // println!("{:?}", experiment_time);
+            // for i in (0..y.len()).map(|x| x as f64){
+            //     let time = time.push(i);
+            //     time
+            //     }
+            // println!("{:?}", time.len());
+            // for _z in 0..=y.len() {
+            //     let dumm = time.push(_z+increment);
+            //     println!("{:?}",dumm);
+            // }
+            //     .map_into::<f64>()
+            //     .collect_vec();
+            println!("{:?}", increment);
+
+    // let signal = vec![
+    //     (0.3,-1.3),
+    //     (0.3,-4.3),
+    //     (0.4,-1.3),
+    //     (0.5,-8.3),
+    //     (0.5,-8.3),
+    // ];
+    // let s1: Plot = Plot::new(signal).point_style(
+    //     PointStyle::new()
+    //         .marker(PointMarker::Square)
+    //         .colour("#DD3355"),
+    // );
+    // let x = ContinuousView::new()
+    //     .add(s1)
+    //     .x_range(0., 1.)
+    //     .y_range(-10., 10.)
+    //     .x_label("Some shit")
+    //     .y_label("Some other shit");
+
+    // Page::single(&x).save("example.svg").unwrap();
+// println!("{:?}", file.channels(&"/ 'Wind Measurement'/'Wind2'"))
+#+end_src
