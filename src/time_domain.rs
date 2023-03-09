@@ -7,6 +7,8 @@ use itertools_num::linspace;
 use gnuplot::{Figure, Caption, Color,
               AxesCommon,LineWidth};
 
+use iir_filters::filter_design::{self, butter};
+// use iir_filters::sos::SosPairing::Nearest;, sos::zpk2sos
 #[derive(Debug)]
 pub struct Signal <'a> {
     pub data: TDMSFile<'a>,
@@ -14,6 +16,19 @@ pub struct Signal <'a> {
     pub inv_state_exp: String,
     pub ws: String,
 
+}
+
+impl Signal<'_> {
+    pub(super) fn butterwoth(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let order = 5 as u32;
+        let cuttoff = 20 as f64;
+        let fs = 81 as f64;
+
+        let _zpk = butter(order, filter_design::FilterType::LowPass(cuttoff), fs)?;
+        // let sos  = zpk2sos(&zpk, Some(iir_filters::sos::SosPairing::Minimal))?;
+
+        return Ok( () );
+    }
 }
 
 impl Signal<'_> {

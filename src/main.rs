@@ -51,6 +51,7 @@ fn main(){
         inv_state_exp: inverter_state,
         ws: wind_speed,
     };
-    raw_signal.plot_signal_in_time_domain("Wind2", &true)
+    raw_signal.plot_signal_in_time_domain("Wind2", &false);
+    println!("{:?}", raw_signal.butterwoth());
 }
 
