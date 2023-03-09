@@ -4,8 +4,8 @@ use std::path::Path;
 use tdms::TDMSFile;
 
 // personal make path function
-mod path;
-mod time_domain;
+pub(crate) mod path;
+pub(crate) mod time_domain;
 
 fn main(){
 
