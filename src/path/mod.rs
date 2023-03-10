@@ -1,6 +1,5 @@
-use crate::OsStr;
-use crate::Cow;
-use path_slash::CowExt as _;
+// use crate::Cow;
+// use path_slash::CowExt as _;
 
 
 struct WindSupply {
@@ -18,9 +17,9 @@ struct InnerExpFolders {
 
 
 pub fn make_the_path<'a> (local:      &'a str,
-                      exp_type:   &'a str,
-                      inv:        &'a str,
-                      ws:         &'a str) -> Cow<'a, OsStr> {
+                          exp_type:   &'a str,
+                          inv:        &'a str,
+                          ws:         &'a str) -> String {
     // wind supply method
     let experiment = WindSupply {
         type_of_experiment: String::from(exp_type),
@@ -53,13 +52,16 @@ pub fn make_the_path<'a> (local:      &'a str,
             inverter_and_ws.inv
         };
 
-    println!("{:?}", experiment_state);
+    // println!("{:?}", experiment_state);
     const FILE_NAME: &str = "Data.tdms";
-    let full_path: OsStr = *OsStr::new(&format!(
+    let full_path: String = String::from(&format!(
         "{local_place}{parent}{record}{experiment_type}{experiment_state}{FILE_NAME}"));
+    full_path
 
-    if cfg!(target_os = "linux"){
-        Cow::<'a, OsStr>::Borrowed(&full_path)
-    }else {Cow::<'a, OsStr>::Borrowed(&full_path)
-           }
+    // if cfg!(target_os = "linux"){
+    //     let x = Cow::<String>::Borrowed(&full_path);
+    //     x
+    // }else {let windows = Cow::<String>::Borrowed(&full_path);
+    //        windows
+    //        }
 }

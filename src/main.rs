@@ -3,40 +3,34 @@ use std::path::Path;
 // extern crate tdms;
 use tdms::TDMSFile;
 
-// personal make path function
-pub(crate) mod path;
-pub(crate) mod time_domain;
-
-fn main(){
+// personal functions and struct
+pub mod path;
+pub mod time_domain;
+use crate::time_domain::Signal;
+fn main()-> Result<(), Box<dyn std::error::Error>>{
 
     // be sure of what to plot
     let system_path = String::from("/home/dtos_experiment/Documents/");
     let experiment = String::from("inverter/");
     let inverter_state = String::from("1");
     let wind_speed = String::from("5");
+    let papadakis_sys = String::from("D:/_data/WEL/WEL20220512/");
 
-    // make the path
-    let sig_path = path::make_the_path(&system_path,
-                                       &experiment,
-                                       &inverter_state,
-                                       &wind_speed);
-    // open a single file and store it in "file"
+    let checked_os = match cfg!(target_os = "windows"){
+        true => {path::make_the_path(&papadakis_sys,
+                                     &experiment,
+                                     &inverter_state,
+                                     &wind_speed)
+        }
+        false => {path::make_the_path(&system_path,
+                                      &experiment,
+                                      &inverter_state,
+                                      &wind_speed)}
+    };
 
-    let sys_path = if Path::new(&sig_path).is_dir() {
-       let sp = String::from("D:/_data/WEL/WEL20220512/");
-        let papadakis_sys = &sp;
-        path::make_the_path(papadakis_sys,
-                            &experiment,
-                            &inverter_state,
-                            &wind_speed)
+    println!("{:?}", &checked_os);
 
-    }else{String::from(sig_path)};
-    println!("{:?}", sys_path);
-
-
-    let sig = match TDMSFile::from_path(
-        Path::new(&sys_path)
-    ) {
+    let sig = match TDMSFile::from_path(Path::new(&checked_os)){
         // catch the error
         // dont know exactly
         // how it works
@@ -45,12 +39,12 @@ fn main(){
     };
     // println!("{:?}", sig.segments.len());
 
-    let raw_signal = time_domain::Signal{
-        data: sig,
-        state: experiment,
-        inv_state_exp: inverter_state,
-        ws: wind_speed,
+    let raw_signal = Signal{
+        data:           sig,
+        state:          experiment,
+        inv_state_exp:  inverter_state,
+        ws:             wind_speed,
     };
-    raw_signal.plot_signal_in_time_domain("Wind2", &true)
+    Signal::plot_signal_in_time_domain(&raw_signal, "Wind1", &true);
+    Signal::filter_butter(&raw_signal, 2, 400.)
 }
-
