@@ -5,14 +5,13 @@ use std::path::Path;
 use tdms::TDMSFile;
 
 // personal functions and struct
+mod simple_gui;
 pub mod path;
 pub mod time_domain;
 use crate::time_domain::Signal;
 
 
-fn main()-> Result<(), Box<dyn std::error::Error>>{
-
-    // let file = std::fs::read_to_string(".")?;
+fn main() -> Result<(), Box<dyn std::error::Error>>{
     // be sure of what to plot
     let system_path = String::from("/home/dtos_experiment/Documents/");
     let experiment = String::from("compressed air/");
@@ -48,6 +47,7 @@ fn main()-> Result<(), Box<dyn std::error::Error>>{
                             inv_state_exp: inverter_state,
                             ws: wind_speed};
     // (&raw_signal).print_num_samp::<Error>();
-    (&raw_signal).plot_raw_signal("Wind2", &true);
+    // (&raw_signal).plot_raw_signal("Wind2", &true);
+    simple_gui::gui_single_file();
     Ok( () )
 }
