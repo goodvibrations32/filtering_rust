@@ -52,7 +52,7 @@ pub fn make_the_path<'a> (local:      &'a str,
             inverter_and_ws.inv
         };
 
-    // println!("{:?}", experiment_state);
+    println!("{:?}", experiment_state);
     const FILE_NAME: &str = "Data.tdms";
     let full_path: String = String::from(&format!(
         "{local_place}{parent}{record}{experiment_type}{experiment_state}{FILE_NAME}"));

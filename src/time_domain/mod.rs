@@ -1,7 +1,9 @@
-use iir_filters::{filter_design::{butter, FilterType}, sos::zpk2sos, filter::DirectForm2Transposed};
+// use iir_filters::{filter::DirectForm2Transposed,
+//                   sos::zpk2sos,
+//                   filter_design::{butter, FilterType}};
 use itertools::Itertools;
 extern crate tdms;
-use tdms::{data_type::TdmsDataType, TDMSFile, channel_iter::ChannelDataIter};
+use tdms::{data_type::TdmsDataType, TDMSFile};
 extern crate itertools;
 extern crate itertools_num;
 use itertools_num::linspace;
@@ -17,76 +19,81 @@ pub struct Signal <'a> {
 
 }
 // trait Filtering {
-//     fn plot_filt_over_raw (&self) -> Result<(), Box<dyn std::error::Error>> {
+//     fn plot_filt_over_raw (&self) -> Result<DirectForm2Transposed,
+//                                             Box<dyn std::error::Error>> {
 //         let order = 5;
 //         let cutoff = 10.0;
 //         let fs = 44210.0;
 //         let zpk = butter(order, FilterType::LowPass(cutoff), fs)?;
 //         let sos  = zpk2sos(&zpk, None)?;
 //         let dft2 = DirectForm2Transposed::new(&sos);
-//         return Ok( () );
-//     }
+//         return Ok( dft2 );
+//    }
 // }
 
 impl Signal<'_> {
-   pub fn filter_butter(&self,order: u32, cutoff: f64) -> Result<(), Box<dyn std::error::Error>>{
+    #[doc = r#"Returns the number of samples .
+It takes the [`Signal`] struct as an argument
+and returns the number of samples from each
+channel of a tdms file.
+# Panics
 
+Panics if the datatype of the file are not
+stored as `float`"#]
+    // #[allow(dead_code)]
+    pub fn print_num_samp<Iter>(self) -> () {
         let groups = self.data.groups();
         // let single_chann =(self.channels("Wind Measurement")).get(witch_channel);
-        for group in &groups {
-            let channels = self.data.channels(&group);
-
+        (&groups)
+            .into_iter()
+            .for_each(|group| {
             // begin the search through files
             let mut _i = 0;
-            for (_, channel) in channels{
-                let full_group = match channel.data_type {
-                    TdmsDataType::DoubleFloat(_) => self.data.channel_data_double_float(channel),
-                    _ => {
-                        panic!("{}", "channel for data type unimplemented")
-                    }
-                };
-
-                let full_group_iterator = match full_group {
-                    Ok(i) => i,
-                    Err(e) => {
-                        panic!("{:?}", e)
-                    }
-                };
-                // store the signal somewhere
-                let time_output: _ = full_group_iterator
-                    .map_into::<f64>()
-                    .collect_vec();
-
-                // print dataset groups information
-                // println!("signal length ={:1?} group ={:2?} channel ={:3?}",
-                //          &time_output.len(), &channel.group_path, &channel.path);
-                _i += 1;
-
-                // make the time increment for later usage!!
-                let _increment = 1.0/time_output.len() as f64;
-                let fs = time_output.len() as f64/7.;
-                // best way found for the time domain
-                // data in respect to the signal
-                let time: _ = linspace(0., time_output.len() as f64/fs, time_output.len())
-                    .map_into::<f64>()
-                    .collect_vec();
-                let cutoff_low: f64 = 10.;
-                let cutoff_hi: f64 = cutoff;
-                let zpk = butter(order, FilterType::BandPass(cutoff_low, cutoff_hi),fs)?;
-                let sos = zpk2sos(&zpk, None)?;
-
-                let mut dft2 = DirectForm2Transposed::new(&sos);
-                let mut output:Vec<f64> = vec![];
-
-                for x in time_output.iter() {
-                    output.push( iir_filters::filter::Filter::filter(&mut dft2, *x) );
-                    return {x; Ok( () )};
-                }
-            }
+            self.data.channels(&group)
+                     .into_iter()
+                     .for_each(|(_, channel)| {
+                // best way to retrieve the values so far
+                let output  = match if let TdmsDataType::DoubleFloat(_) = channel.data_type {
+                    self.data.channel_data_double_float(channel)
+                } else {panic!("{}", "channel for data type unimplemented")
+                } {
+                    Ok(i) => {
+                        i
+                    },
+                    Err(e) => {panic!("{:?}", e)
+                    }}.map_into::<f64>().collect_vec();
+                println!("{:?}", output.len() );
+                });
+            });
         }
-        Ok(())//return Ok( () );
-   }
-    pub fn plot_signal_in_time_domain (&self,
+        // Ok(());//return Ok( () );
+       // todo!("find how to return the filter output");
+
+    /// Plots the signal in time domain.
+    /// Parameters
+    /// ----------
+    /// Takes 2 arguments and plots the signal in
+    /// time domain. Also provides information if
+    /// the file is found but the channel in the
+    /// function described as `witch_channel` is
+    /// `"unknown"`.
+    /// - witch_channel: "Wind2"
+    /// - draw: `true` or `false`
+    ///
+    /// # Panics
+    ///
+    /// Panics if .
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use spectrum_in_rust::time_domain::Signal;
+    ///
+    /// let raw_data = Signal{} ;
+    /// raw_data.plot_raw_signal(witch_channel: "unknown",
+    ///                                     draw: true);
+    /// ```
+    pub fn plot_raw_signal (&self,
                                        witch_channel: &str,
                                        // plot_title: &str,
                                        draw: &bool) -> () {
@@ -130,17 +137,14 @@ impl Signal<'_> {
                     .map_into::<f64>()
                     .collect_vec();
                 if witch_channel == "unknown"{
-                    println!("channel name   {:?}", &channel.path);
-                    println!("  time vector length ={:?}",
-                             time.len());
-                    println!("  sampling freq ={:?} Hz",
-                             fs as f32);
-                    println!("  last time item ={:?} s",
+                    println!("channel name {:?} \n samples ={:?} ~ duration ={:?} s \n",
+                             &channel.path,
+                             time.len(),
                              time.last().copied());
                     // println!("signal length ={:1?} group ={:2?} channel ={:3?}",
                     //  &time_output.len(), &channel.group_path, &channel.path);
                 }else {let plot_title =
-                       if channel.path == witch_channel
+                       if &channel.path == witch_channel
                        && self.state.find("c") == Some(0){
                            "Compressed air"}
                        else{
@@ -148,7 +152,10 @@ impl Signal<'_> {
 
                        let mut fg =
                        if *draw && &channel.path == witch_channel {
-                           Figure::new()}else {continue;};
+                           Figure::new()}
+                       else {
+                           println!("no maching channel in dataset to plot");
+                           break;};
 
                        //make the plot
                        let the_title = format!("{} measurements", &plot_title);
@@ -164,15 +171,21 @@ impl Signal<'_> {
                                 LineWidth    (0.5)]);
 
                        // check if user wants graph
-                       if *draw && &channel.path == witch_channel {fg.show().unwrap();} else {continue;}
+                       if *draw && (&channel.path == witch_channel){
+                           fg.show().unwrap();}
+
+                       else{
+                           continue;}
 
                        // TODO attempt to save interactive semi-done!!
                        let f_type: &str = ".png";
-                       let _save_to_file = format!(
-                           "{}{}", plot_title, f_type)
+                       let _save_to_file = format!("{}{}",
+                                                   plot_title,
+                                                   f_type)
                        .replace(" ", "_")
                        .replace("/","");
                 };
-
-            }}}
+            }
+        }
+    }
 }
