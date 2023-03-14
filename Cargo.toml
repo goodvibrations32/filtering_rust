@@ -1,6 +1,6 @@
 [package]
 name = "spectrum_in_rust"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -8,6 +8,7 @@ edition = "2021"
 # by default feature "microfft-real" is used
 [dependencies]
 dsp = "0.10.2"
+svg = "0.13.0"
 ffi = "0.0.2"
 gnuplot = "0.0.37"
 iir_filters = "0.1.2"
