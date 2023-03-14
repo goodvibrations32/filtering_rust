@@ -3,6 +3,7 @@
 //                   filter_design::{butter, FilterType}};
 use itertools::Itertools;
 extern crate tdms;
+use native_dialog::{MessageDialog, MessageType};
 use tdms::{data_type::TdmsDataType, TDMSFile};
 extern crate itertools;
 extern crate itertools_num;
@@ -18,27 +19,8 @@ pub struct Signal <'a> {
   pub ws: String,
 
 }
-// trait Filtering {
-//     fn plot_filt_over_raw (&self) -> Result<DirectForm2Transposed,
-//                                             Box<dyn std::error::Error>> {
-//         let order = 5;
-//         let cutoff = 10.0;
-//         let fs = 44210.0;
-//         let zpk = butter(order, FilterType::LowPass(cutoff), fs)?;
-//         let sos  = zpk2sos(&zpk, None)?;
-//         let dft2 = DirectForm2Transposed::new(&sos);
-//         return Ok( dft2 );
-//    }
-// }
-
 impl Signal<'_> {
-  #[doc = r#"Returns the number of samples .
-It takes the [`Signal`] struct as an argument
-and returns the number of samples from each
-channel of a tdms file.
-# Panics
-Panics if the datatype of the file are not
-stored as `float`"#]
+
   // #[allow(dead_code)]
   fn _experimental_parser_tdms<Iter>(self) -> () {
     let mut output_data_raw: Vec<_> = [].to_vec();
@@ -58,18 +40,17 @@ stored as `float`"#]
                        self.data.channel_data_double_float(channel)
                      } else {panic!("{}", "channel for data type unimplemented")
                      } {
-                       Ok(i) => {
-                         i
-                       },
+                       Ok(i) => {i},
                        Err(e) => {panic!("{:?}", e)
-                       }}.map_into::<f64>().collect_vec();
+                       }
+                     }.map_into::<f64>()
+                     .collect_vec();
                    println!("{:?}", output.len() );
                    return output_data_raw = match if let
                      TdmsDataType::DoubleFloat(_) = channel.data_type {
                        self.data.channel_data_double_float(channel)
                      } else {panic!("{}", "channel for data type unimplemented")
-                     } {Ok(i) => {i
-                     },
+                     } {Ok(i) => {i},
                        Err(e) => {panic!("{:?}", e)
                        }}.map_into::<f64>()
                      .collect_vec()

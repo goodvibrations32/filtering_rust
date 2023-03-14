@@ -11,7 +11,7 @@ use crate::time_domain::Signal;
 pub fn gui_single_file(data_channel: String){
     // -> Result<(), Box<dyn std::error::Error>>{
     let path = FileDialog::new()
-        .set_location("~/Documents/data_folder")
+        .set_location("../../data")
     // .add_filter("TDMS dataset", &[".tdms"])
     // .add_filter("JPEG Image", &["csv", "jpeg"])
         .show_open_single_file()
