@@ -27,8 +27,8 @@ pub fn gui_single_file(data_channel: String){
 
     let yes = MessageDialog::new()
         .set_type(MessageType::Info)
-        .set_title("Do you want to open the file?")
-        .set_text(&format!("{:#?}", path))
+        .set_text(&format!("Do you want to open following file? \n\
+                            {:#?}", path))
         .show_confirm()
         .unwrap();
     match yes {

@@ -3,7 +3,7 @@
 //                   filter_design::{butter, FilterType}};
 use itertools::Itertools;
 extern crate tdms;
-use native_dialog::{MessageDialog, MessageType};
+
 use tdms::{data_type::TdmsDataType, TDMSFile};
 extern crate itertools;
 extern crate itertools_num;
@@ -120,7 +120,8 @@ impl Signal<'_> {
 
         // make the time increment for later usage!!
         let _increment = 1.0/time_output.len() as f64;
-        let fs = time_output.len() as f64/8.;
+        let fs = time_output.len() as f64/7.;
+        // let fs = 1./_increment;
         // let fs = 100_000. ;
         // best way found for the time domain
         // data in respect to the signal
