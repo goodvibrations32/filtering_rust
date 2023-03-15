@@ -9,11 +9,9 @@ use crate::time_domain::Signal;
 
 
 pub fn gui_single_file(data_channel: String, plot: bool){
-    // -> Result<(), Box<dyn std::error::Error>>{
+
     let path = FileDialog::new()
         .set_location("../../data")
-    // .add_filter("TDMS dataset", &[".tdms"])
-    // .add_filter("JPEG Image", &["csv", "jpeg"])
         .show_open_single_file()
         .unwrap();
 
@@ -51,7 +49,7 @@ pub fn gui_single_file(data_channel: String, plot: bool){
                                           Some(..) => 1,
                                           None => 0
                                       };
-            // let _each_experiment: Split<&str> = experiment.split(" ");
+
             println!("{:?}", path);
             for speed in each_speed {
 
@@ -68,9 +66,6 @@ pub fn gui_single_file(data_channel: String, plot: bool){
 
                 match checker_inv.is_some() && ws.is_some() {
                     true => {
-                        // println!("{:?}  {:?}", path, ws);
-
-                        // println!("{:?}", checker_inv);
                         let sig = match TDMSFile::from_path(&path){
                             Ok(f) =>f,
                             Err(e) => panic!("{:?}", e),
@@ -80,12 +75,9 @@ pub fn gui_single_file(data_channel: String, plot: bool){
                                                 inv_state_exp: inv_state.to_string(),
                                                 ws: speed.to_string()
                                                 .replace(['_','.'], "")};
-                        // (&raw_signal).print_num_samp::<Error>();
                         (raw_signal).plot_raw_signal(&data_channel, &plot);
                     }
                     false => continue
-                        // println!(
-                        // "Consider following a naming convention for the folders i.e. 'caINV_WS.1' (INV=0 or 1 and WS=0,5,10,15,20)"),
                 }
             }
         }

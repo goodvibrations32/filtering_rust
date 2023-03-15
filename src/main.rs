@@ -1,3 +1,4 @@
+#[doc = r"The main file that the user should run and will be calling everything else."]
 mod simple_gui;
 pub mod time_domain;
 
@@ -6,6 +7,7 @@ use native_dialog::{
 
 
 fn main() -> Result<(), Box<dyn std::error::Error>>{
+
     let choises = MessageDialog::new().set_type(MessageType::Info)
                                       .set_text(
                                           "🧪 Do you know the channel name of the dataset? 🧪 \n\
@@ -24,8 +26,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
         true => simple_gui::gui_single_file("Wind2".to_string(), true),
         false => simple_gui::gui_single_file("unknown".to_string(), false)
     }
-
-    // time_domain::
-
     Ok( () )
 }

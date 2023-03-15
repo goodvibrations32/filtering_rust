@@ -1,6 +1,3 @@
-// use iir_filters::{filter::DirectForm2Transposed,
-//                   sos::zpk2sos,
-//                   filter_design::{butter, FilterType}};
 use itertools::Itertools;
 extern crate tdms;
 
@@ -13,6 +10,10 @@ use gnuplot::{Figure, Caption, Color,
 
 #[derive(Debug)]
 pub struct Signal <'a> {
+/// Here we make a Struct which contains the dataset
+/// signal we choose in the ui operations  and some
+/// characteristics from the file path
+/// to make the choises bool compares instead of loops.
   pub data: TDMSFile<'a>,
   pub state: String,
   pub inv_state_exp: String,
@@ -20,10 +21,9 @@ pub struct Signal <'a> {
 
 }
 impl Signal<'_> {
-  // Ok(());//return Ok( () );
-  // todo!("find how to return the filter output");
-
   /// Plots the signal in time domain.
+  /// Here for plotting gnuplot is used and decleared
+  /// as a dependency in Cargo.toml among other deps.
   /// Parameters
   /// ----------
   /// Takes 2 arguments and plots the signal in
@@ -53,100 +53,99 @@ impl Signal<'_> {
                          // plot_title: &str,
                          draw: &bool) {
     let groups = self.data.groups();
-    // let single_chann =(self.channels("Wind Measurement")).get(witch_channel);
-    groups.iter()
-          .for_each(|group| {
-            let channels = self.data.channels(group);
 
-            // begin the search through files
-            let mut _i = 0;
-            for (_, channel) in channels{
-              let full_group = match channel.data_type {
-                TdmsDataType::DoubleFloat(_) => self.data.channel_data_double_float(channel),
-                _ => {
-                  panic!("{}", "channel for data type unimplemented")
-                }
-              };
+    groups.iter().for_each( |group| {
+      let channels = self.data.channels(group);
 
-              let full_group_iterator = match full_group {
-                Ok(i) => i,
-                Err(e) => {
-                  panic!("{:?}", e)
-                }
-              };
-              // store the signal somewhere
-              let time_output = full_group_iterator
-                .map_into::<f64>()
-                .collect_vec();
+      // begin the search through files
+      // let mut _i = 0;
+      for (_, channel) in channels{
+        let full_group = match channel.data_type {
+          TdmsDataType::DoubleFloat(_) => self.data.channel_data_double_float(channel),
+          _ => {
+            panic!("{}", "channel for data type unimplemented")
+          }
+        };
 
-              _i += 1;
+        let full_group_iterator = match full_group {
+          Ok(i) => i,
+          Err(e) => {
+            panic!("{:?}", e)
+          }
+        };
+        // store the signal somewhere
+        let time_output = full_group_iterator
+          .map_into::<f64>()
+          .collect_vec();
 
-              // make the time increment for later usage!!
-              let _increment = 1.0/time_output.len() as f64;
-              let fs = time_output.len() as f64/7.;
+        // _i += 1;
 
-              // best way found for the time domain
-              // data in respect to the signal
-              let time = linspace(0., time_output.len() as f64 / fs,
-                                  time_output.len()).map_into::<f64>()
-                .collect_vec();
+        // make the time increment for later usage!!
+        let _increment = 1.0/time_output.len() as f64;
+        let fs = time_output.len() as f64/7.;
 
-              if witch_channel == "unknown"{
-                println!("channel name {:?} \n\
-                          samples = {:?} ~ duration = {:?} s ~ \
-                          sampling frequency = {:?} Hz\n",
-                         &channel.path,
-                         time.len(),
-                         time.last().copied(),
-                         fs as f32);
+        // best way found for the time domain
+        // data in respect to the signal
+        let time = linspace(0., time_output.len() as f64 / fs,
+                            time_output.len()).map_into::<f64>()
+          .collect_vec();
 
-              }else {let plot_title =
-                     if &channel.path == witch_channel
-                     && self.state.contains('c') {
-                       "Compressed air"}
-                     else{
-                       "Inverter"};
+        if witch_channel == "unknown"{
+          println!("channel name {:?} \n\
+                    samples = {:?} ~ duration = {:?} s ~ \
+                    sampling frequency = {:?} Hz\n",
+                   &channel.path,
+                   time.len(),
+                   time.last().copied(),
+                   fs as f32);
 
-                     let mut fg =
-                     if *draw && (&channel.path == witch_channel) {
-                       Figure::new()}
-                     else {
-                       println!(
-                         "no maching channel in dataset to plot \
-                          or you coose only info in the start \n\
-                          channel name {:?}",
-                         channel.path);
-                       continue;};
+        }else {let plot_title =
+               if channel.path == witch_channel
+               && self.state.contains('c') {
+                 "Compressed air"}
+               else{
+                 "Inverter"};
 
-                     //make the plot
-                     let the_title = format!("{} measurements", &plot_title);
-                     fg.set_title(&the_title)
-                     .axes2d()
-                     .set_x_label("Time (s)", &[])
-                     .set_y_label("Amplitute of signal", &[])
-                     .lines(time, time_output,
-                            &[Caption      (&format!(" Inv {:1?} Ws {:2?}",
-                                                     self.inv_state_exp,
-                                                     self.ws.to_string())),
-                              Color        ("#a705b0"),
-                              LineWidth    (0.5)]);
+               let mut fg =
+               if *draw && (channel.path == witch_channel) {
+                 Figure::new()}
+               else {
+                 println!(
+                   "no maching channel in dataset to plot \
+                    or you coose only info in the start \n\
+                    channel name {:?}",
+                   channel.path);
+                 continue;};
 
-                     // check if user wants graph
-                     if *draw && (&channel.path == witch_channel){
-                       fg.show().unwrap();}
+               //make the plot
+               let the_title = format!("{} measurements", &plot_title);
+               fg.set_title(&the_title)
+               .axes2d()
+               .set_x_label("Time (s)", &[])
+               .set_y_label("Amplitute of signal", &[])
+               .lines(time, time_output,
+                      &[Caption      (&format!(" Inv {:1?} Ws {:2?}",
+                                               self.inv_state_exp,
+                                               self.ws.to_string())),
+                        Color        ("#a705b0"),
+                        LineWidth    (0.5)]);
 
-                     else{
-                       continue;}
+               // check if user wants graph
+               if *draw && (channel.path == witch_channel){
+                 fg.show().unwrap();}
 
-                     // TODO attempt to save interactive semi-done!!
-                     let f_type: &str = ".png";
-                     let _save_to_file = format!("{}{}",
-                                                 plot_title,
-                                                 f_type)
-                     .replace(' ', "_")
-                     .replace('/',"");
-              };
-            }
-          });
+               else{
+                 continue;}
+
+               // TODO attempt to save interactive semi-done!!
+               let f_type: &str = ".png";
+               let _save_to_file = format!("{}{}",
+                                           plot_title,
+                                           f_type)
+               .replace(' ', "_")
+               .replace('/',"");
+        };
+      }
+    });
   }
 }
