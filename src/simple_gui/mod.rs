@@ -8,7 +8,7 @@ use native_dialog::{
 use crate::time_domain::Signal;
 
 
-pub fn gui_single_file(data_channel: String){
+pub fn gui_single_file(data_channel: String, plot: bool){
     // -> Result<(), Box<dyn std::error::Error>>{
     let path = FileDialog::new()
         .set_location("../../data")
@@ -34,7 +34,7 @@ pub fn gui_single_file(data_channel: String){
     match yes {
         true => {
             let speeds = "_0. _5. _10. _15. _20.";
-            let each_speed: Split<&str> = speeds.split(" ").into_iter();
+            let each_speed: Split<char> = speeds.split(' ');
             let experiment = match path.clone()
                                        .into_os_string()
                                        .into_string()
@@ -48,10 +48,10 @@ pub fn gui_single_file(data_channel: String){
                                       .into_string()
                                       .unwrap()
                                       .find("1_") {
-                                          Some(..) => "1",
-                                          None =>"0"
+                                          Some(..) => 1,
+                                          None => 0
                                       };
-            let _each_experiment: Split<&str> = experiment.split(" ");
+            // let _each_experiment: Split<&str> = experiment.split(" ");
             println!("{:?}", path);
             for speed in each_speed {
 
@@ -75,20 +75,13 @@ pub fn gui_single_file(data_channel: String){
                             Ok(f) =>f,
                             Err(e) => panic!("{:?}", e),
                         };
-                        // println!("{:?}", sig.segments.len());
-                        let _experiment_fold = String::from(format!("{}", experiment));
-                        let _wind_speed = String::from(&format!("{}",speed))
-                            .replace("_", "")
-                            .replace(".", "");
-
                         let raw_signal = Signal{data: sig,
                                                 state: experiment.to_string(),
                                                 inv_state_exp: inv_state.to_string(),
                                                 ws: speed.to_string()
-                                                .replace("_", "")
-                                                .replace(".", "")};
+                                                .replace(['_','.'], "")};
                         // (&raw_signal).print_num_samp::<Error>();
-                        (&raw_signal).plot_raw_signal(&data_channel, &true);
+                        (raw_signal).plot_raw_signal(&data_channel, &plot);
                     }
                     false => continue
                         // println!(

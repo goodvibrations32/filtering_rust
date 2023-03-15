@@ -18,3 +18,7 @@ native-dialog = "0.6.3"
 opener = "0.5.2"
 path-slash = "0.2.1"
 tdms = "0.3.0"
+rayon = "1.7.0"
+
+[profile.release]
+lto = true

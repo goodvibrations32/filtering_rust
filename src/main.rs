@@ -1,5 +1,4 @@
 mod simple_gui;
-pub mod path;
 pub mod time_domain;
 pub mod filters;
 // use crate::time_domain::Signal;
@@ -11,7 +10,7 @@ use native_dialog::{
 fn main() -> Result<(), Box<dyn std::error::Error>>{
     let choises = MessageDialog::new().set_type(MessageType::Info)
                                       .set_text(
-                                          "🧪 Do you know the channel name of the dataset? 🧪\n\
+                                          "🧪 Do you know the channel name of the dataset? 🧪 \n\
                                            If yes, remember ... \n\
                                            Have them in the project folder to \n\
                                            navigate easy there.\n\
@@ -24,8 +23,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
                                            about the file you will choose. 
                                            ").show_confirm().unwrap();
     match choises {
-        true => simple_gui::gui_single_file("Wind2".to_string()),
-        false => simple_gui::gui_single_file("unknown".to_string())
+        true => simple_gui::gui_single_file("Wind2".to_string(), true),
+        false => simple_gui::gui_single_file("unknown".to_string(), false)
     }
 
     // time_domain::
