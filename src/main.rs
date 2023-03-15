@@ -1,7 +1,5 @@
 mod simple_gui;
 pub mod time_domain;
-pub mod filters;
-// use crate::time_domain::Signal;
 
 use native_dialog::{
     MessageDialog, MessageType};
