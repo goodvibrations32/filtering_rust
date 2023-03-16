@@ -8,7 +8,8 @@ use native_dialog::{
 use crate::time_domain::Signal;
 
 
-pub fn gui_single_file(data_channel: String, plot: bool){
+pub fn gui_single_file(data_channel: String,
+                       plot: bool){
 
     let path = FileDialog::new()
         .set_location("../../data")

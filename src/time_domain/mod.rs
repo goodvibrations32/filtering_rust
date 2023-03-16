@@ -1,14 +1,13 @@
 use itertools::Itertools;
 extern crate tdms;
-
 use tdms::{data_type::TdmsDataType, TDMSFile};
-extern crate itertools;
+
 extern crate itertools_num;
 use itertools_num::linspace;
+
 use gnuplot::{Figure, Caption, Color,
               AxesCommon,LineWidth};
 
-#[derive(Debug)]
 pub struct Signal <'a> {
 /// Here we make a Struct which contains the dataset
 /// signal we choose in the ui operations  and some
