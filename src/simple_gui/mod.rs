@@ -16,13 +16,14 @@ use crate::time_domain::Signal;
 /// knowing whitch channel name to put
 /// there.
 ///
-/// # Parameters
-/// - data_channel: `String` :
+/// Parameters
+/// ----
+/// - `data_channel`: `String` :
 ///     The wanted channel name as
 ///     literal string. This variable
 ///     is determined in the main.rs
 ///     file.
-/// - plot: `true` or `false` :
+/// - `plot`: `true` or `false` :
 ///     Whether to plot a graph of
 ///     the found signal or just the
 ///     information.
@@ -31,7 +32,8 @@ use crate::time_domain::Signal;
 /// Panics if the file provided is not
 /// a TDMS dataframe type (`.tdms`).
 ///
-/// # Example
+/// # Examples
+///
 /// ## Plotting a known channel
 /// If there is a known channel name passing
 /// the name in `"....".to_string()` and the
