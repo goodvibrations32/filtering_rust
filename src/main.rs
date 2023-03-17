@@ -1,10 +1,27 @@
-#[doc = r"The main file that the user should run and will be calling everything else."]
-mod simple_gui;
+#[doc = r"Selecting a file and extracting the data"]
+pub mod simple_gui;
+#[doc = r"Here all the plotting happens"]
 pub mod time_domain;
 
 use native_dialog::{
     MessageDialog, MessageType};
 
+
+/// # Main function
+/// Here a simple first message is given to explain
+/// to the user what will happen. The idea is to
+/// have a first layer of information about what
+/// the user needs to do. The message appearing in the
+/// screen could look different  but the
+/// text should be identical in all OS's.
+/// ## Choices
+/// - Yes :
+///     The channel with name "Wind2" will be
+///     plotted if it contains any data.
+/// - No :
+///     There will be displayied some information
+///     about any found channel that could be parsed
+///     and in the chosen `.tdms` file.
 
 fn main() -> Result<(), Box<dyn std::error::Error>>{
 
@@ -12,14 +29,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
                                       .set_text(
                                           "🧪 Do you know the channel name of the dataset? 🧪 \n\
                                            If yes, remember ... \n\
-                                           Have them in the project folder to \n\
-                                           navigate easy there.\n\
+                                           Have them in the latest naming \n\
+                                           conventon folders to \n\
+                                           plot a time domain representation\n\
+                                           of the recording.\n\
                                            (The default script plots: \n\
                                            - Wind2 channel and the speed \n\
-                                           that you choose in a legend\n\
-                                           in the plot.) \n\
+                                           from the file you will select \n\
+                                           in a legend in the plot.) \n\
                                            If you dont know dont worry we cover that !! \n\
-                                           choose `NO` and have some info in the terminal \n\
+                                           Choose `NO` and have some info in the terminal \n\
                                            about the file you will choose. 
                                            ").show_confirm().unwrap();
     match choises {

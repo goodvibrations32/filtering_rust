@@ -11,7 +11,6 @@ channel = "nightly"
 # by default feature "microfft-real" is used
 [dependencies]
 svg = "0.13.0"
-ffi = "0.0.2"
 gnuplot = "0.0.37"
 iir_filters = "0.1.2"
 itertools = "0.10.5"
@@ -19,8 +18,8 @@ itertools-num = "0.1.3"
 native-dialog = "0.6.3"
 path-slash = "0.2.1"
 tdms = "0.3.0"
-rayon = "1.7.0"
 [depenencies.native-dialog]
+path = "../.."
 features = ["windows_dpi_awareness", "windows_visual_styles"]
 # [profile.release]
 # lto = true

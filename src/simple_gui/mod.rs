@@ -7,12 +7,54 @@ use native_dialog::{
 // personal functions and struct
 use crate::time_domain::Signal;
 
-
+/// # Choosing a file and extract the data.
+/// Here a possible channel name is given
+/// from the user by defining the variable
+/// `data_channel`. A specific channel name
+/// is used as `unknown` in order to have
+/// the option of oblivion. Meaning not
+/// knowing whitch channel name to put
+/// there.
+///
+/// # Parameters
+/// - data_channel: `String` :
+///     The wanted channel name as
+///     literal string. This variable
+///     is determined in the main.rs
+///     file.
+/// - plot: `true` or `false` :
+///     Whether to plot a graph of
+///     the found signal or just the
+///     information.
+///
+/// # Panics
+/// Panics if the file provided is not
+/// a TDMS dataframe type (`.tdms`).
+///
+/// # Example
+/// ## Plotting a known channel
+/// If there is a known channel name passing
+/// the name in `"....".to_string()` and the
+/// choise to plot true a graph will be
+/// produced using gnuplot which if you
+/// run this correctly should be installed
+/// as a dependency.
+/// ```
+/// simple_gui::gui_single_file("Wind2".to_string(),true)
+/// ```
+/// ## Asking for information.
+/// If the channel name is yet unknown passing
+/// exactly that as the name and just shifting
+/// `plot` to false will give some information
+/// if the file `is .tdms` and there were data
+/// there.
+/// ```
+/// simple_gui::gui_single_file("unknown".to_string(), false)
+/// ```
 pub fn gui_single_file(data_channel: String,
                        plot: bool){
 
     let path = FileDialog::new()
-        .set_location("../../data")
         .show_open_single_file()
         .unwrap();
 
@@ -25,9 +67,9 @@ pub fn gui_single_file(data_channel: String,
     };
 
     let yes = MessageDialog::new()
-        .set_type(MessageType::Info)
         .set_text(&format!("Do you want to open following file? \n\
                             {:#?}", path))
+        .set_type(MessageType::Warning)
         .show_confirm()
         .unwrap();
     match yes {
@@ -50,7 +92,6 @@ pub fn gui_single_file(data_channel: String,
                                           Some(..) => 1,
                                           None => 0
                                       };
-
             println!("{:?}", path);
             for speed in each_speed {
 

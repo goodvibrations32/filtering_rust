@@ -8,36 +8,53 @@ use itertools_num::linspace;
 use gnuplot::{Figure, Caption, Color,
               AxesCommon,LineWidth};
 
+/// This Struct is used to store the
+/// necessary information to process
+/// and or produce a plot of a signal
+/// in the time domain.
 pub struct Signal <'a> {
-/// Here we make a Struct which contains the dataset
-/// signal we choose in the ui operations  and some
-/// characteristics from the file path
-/// to make the choises bool compares instead of loops.
+  /// A parsed tdms file which
+  /// contains all nessecary
+  /// info.
   pub data: TDMSFile<'a>,
+  /// The experiment state
+  /// this is taken from the
+  /// simple file dialog choise.
   pub state: String,
+  /// The inverter state whethere
+  /// `ON` or `OFF`. We extract
+  /// this info from the folder
+  /// naming convention.
   pub inv_state_exp: String,
+  /// The wind speed feeded to
+  /// the sensor taken from the
+  /// folder naming convention
+  /// also.
   pub ws: String,
 
 }
 impl Signal<'_> {
-  /// Plots the signal in time domain.
+  /// # Plots the signal in time domain.
   /// Here for plotting gnuplot is used and decleared
   /// as a dependency in Cargo.toml among other deps.
-  /// Parameters
-  /// ----------
   /// Takes 2 arguments and plots the signal in
   /// time domain. Also provides information if
-  /// the file is found but the channel in the
-  /// function described as `witch_channel` is
-  /// `"unknown"`.
-  /// - witch_channel: "Wind2"
-  /// - draw: `true` or `false`
+  /// the file is found but the variable `witch_channel`
+  /// is set to `"unknown"`. This is choosed in the
+  /// first message dialog box. The variable `draw`
+  /// is internal and used for separate the operation
+  /// of giving the channel info from the plotting to
+  /// avoid crashes for the `unknown` option.
+  /// # Parameters
+  /// - witch_channel: `String`
+  /// - draw: `true` or `false`.
   ///
   /// # Panics
   ///
-  /// Panics if .
+  /// Panics if there is nothing in the given
+  /// channel.
   ///
-  /// # Examples
+  /// # Example
   ///
   /// ```
   /// use spectrum_in_rust::time_domain::Signal;
@@ -49,7 +66,6 @@ impl Signal<'_> {
   /// ```
   pub fn plot_raw_signal(&self,
                          witch_channel: &str,
-                         // plot_title: &str,
                          draw: &bool) {
     let groups = self.data.groups();
 
@@ -110,8 +126,8 @@ impl Signal<'_> {
                  Figure::new()}
                else {
                  println!(
-                   "no maching channel in dataset to plot \
-                    or you coose only info in the start \n\
+                   "no maching channel in dataset to plot \n\
+                    But we found one with the following name \n\
                     channel name {:?}",
                    channel.path);
                  continue;};
@@ -122,7 +138,7 @@ impl Signal<'_> {
                .axes2d()
                .set_x_label("Time (s)", &[])
                .set_y_label("Amplitute of signal", &[])
-               .lines(time, time_output,
+               .lines(&time, time_output,
                       &[Caption      (&format!(" Inv {:1?} Ws {:2?}",
                                                self.inv_state_exp,
                                                self.ws.to_string())),
@@ -131,7 +147,16 @@ impl Signal<'_> {
 
                // check if user wants graph
                if *draw && (channel.path == witch_channel){
-                 fg.show().unwrap();}
+                 fg.show().unwrap();
+
+                 println!("channel name {:?} \n\
+                           samples = {:?} ~ duration = {:?} s ~ \
+                           sampling frequency = {:?} Hz\n",
+                          &channel.path,
+                          &time.len(),
+                          time.last().copied(),
+                          fs as f32);
+               }
 
                else{
                  continue;}
