@@ -7,5 +7,5 @@ This repository is a small project in order to be able to plot a signal in time 
 
 ## Goal
 To make this also supports :
-    - [ ] filtering at least with a basic butterworth
-    - [ ] choose more than one file
+- [ ] filtering at least with a basic butterworth
+- [ ] choose more than one file
