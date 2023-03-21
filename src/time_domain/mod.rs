@@ -8,6 +8,8 @@ use itertools_num::linspace;
 use gnuplot::{Figure, Caption, Color,
               AxesCommon,LineWidth};
 
+use crate::filtering::FilterMods;
+
 /// This Struct is used to store the
 /// necessary information to process
 /// and or produce a plot of a signal
@@ -105,6 +107,16 @@ impl Signal<'_> {
                             time_output.len()).map_into::<f64>()
           .collect_vec();
 
+        // construct a basic 2nd order filter
+        let fc_2000 = FilterMods{
+          order: 2,
+          cutoff_low: 2000.,
+        };
+        //filter the time output
+        let filtered: Vec<_> = fc_2000.simple_lowpass(time_output.clone(),
+                                                                fs).into_iter()
+                                                                   .collect();
+
         if witch_channel == "unknown"{
           println!("channel name {:?} \n\
                     samples = {:?} ~ duration = {:?} s ~ \
@@ -143,6 +155,12 @@ impl Signal<'_> {
                                                self.inv_state_exp,
                                                self.ws.to_string())),
                         Color        ("#a705b0"),
+                        LineWidth    (0.5)])
+               .lines(
+                 &time,
+                 &filtered.concat(),
+                      &[Caption      ("2000 Hz lowpass"),
+                        Color        ("black"),
                         LineWidth    (0.5)]);
 
                // check if user wants graph

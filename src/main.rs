@@ -2,6 +2,7 @@
 pub mod simple_gui;
 #[doc = r"Here all the plotting happens"]
 pub mod time_domain;
+mod filtering;
 
 use native_dialog::{
     MessageDialog, MessageType};
