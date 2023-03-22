@@ -35,6 +35,7 @@ pub struct Signal <'a> {
   pub ws: String,
 
 }
+
 impl Signal<'_> {
   /// # Plots the signal in time domain.
   /// Here for plotting gnuplot is used and decleared
@@ -66,9 +67,9 @@ impl Signal<'_> {
   /// raw_data.plot_raw_signal(witch_channel: "unknown",
   ///                                     draw: true);
   /// ```
-  pub fn plot_raw_signal(&self,
-                         witch_channel: &str,
-                         draw: &bool) {
+  pub fn plot_in_time_dom (&self,
+                           witch_channel: &str,
+                           draw: &bool) {
     let groups = self.data.groups();
 
     groups.iter().for_each( |group| {
@@ -114,8 +115,8 @@ impl Signal<'_> {
         };
         //filter the time output
         let filtered: Vec<_> = fc_2000.simple_lowpass(time_output.clone(),
-                                                                fs).into_iter()
-                                                                   .collect();
+                                                      fs).into_iter()
+                                                         .collect();
 
         if witch_channel == "unknown"{
           println!("channel name {:?} \n\
@@ -159,9 +160,9 @@ impl Signal<'_> {
                .lines(
                  &time,
                  &filtered.concat(),
-                      &[Caption      ("2000 Hz lowpass"),
-                        Color        ("black"),
-                        LineWidth    (0.5)]);
+                 &[Caption      ("2000 Hz lowpass"),
+                   Color        ("black"),
+                   LineWidth    (0.5)]);
 
                // check if user wants graph
                if *draw && (channel.path == witch_channel){

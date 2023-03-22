@@ -19,11 +19,19 @@ impl FilterMods {
                          FilterType::LowPass(self.cutoff_low), sigfs)?;
         let sos = zpk2sos(&zpk, None)?;
         let mut dft2mode = DirectForm2Transposed::new(&sos);
-        let input: Vec<_> = sig;
         let mut out: Vec<f64> = vec![];
-        input.iter().for_each(|x| {
+
+        sig.iter().for_each(|x| {
             out.push(dft2mode.filter(*x));
         });
         Ok(out)
+    }
+}
+impl FilterMods {
+    pub fn _simple_highpass (self,
+                            _sig: Vec<f64>,
+                            _sigfs: f64)
+                            -> Result<Vec<f64>, Box<dyn std::error::Error>>{
+        todo!("Have to implement a simple high pass butterworth for general use")
     }
 }

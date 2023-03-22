@@ -57,14 +57,11 @@ pub fn gui_single_file(data_channel: String,
                        plot: bool){
 
     let path = FileDialog::new()
-        .show_open_single_file()
-        .unwrap();
+        .show_open_single_file();
+    let temp = path.unwrap();
 
-    // TODO take the experiment info here
-    // from the file dialod path and the
-    // cycle of hell will end !!
-    let path = match path {
-        Some(path) => path,
+    let path = match &temp {
+        Some(temp) => temp,
         None => return,
     };
 
@@ -72,9 +69,8 @@ pub fn gui_single_file(data_channel: String,
         .set_text(&format!("Do you want to open following file? \n\
                             {:#?}", path))
         .set_type(MessageType::Warning)
-        .show_confirm()
-        .unwrap();
-    match yes {
+        .show_confirm();
+    match yes.unwrap() {
         true => {
             let speeds = "_0. _5. _10. _15. _20.";
             let each_speed: Split<char> = speeds.split(' ');
@@ -110,7 +106,7 @@ pub fn gui_single_file(data_channel: String,
 
                 match checker_inv.is_some() && ws.is_some() {
                     true => {
-                        let sig = match TDMSFile::from_path(&path){
+                        let sig = match TDMSFile::from_path(path){
                             Ok(f) =>f,
                             Err(e) => panic!("{:?}", e),
                         };
@@ -119,7 +115,7 @@ pub fn gui_single_file(data_channel: String,
                                                 inv_state_exp: inv_state.to_string(),
                                                 ws: speed.to_string()
                                                 .replace(['_','.'], "")};
-                        (raw_signal).plot_raw_signal(&data_channel, &plot);
+                        (raw_signal).plot_in_time_dom(&data_channel, &plot);
                     }
                     false => continue
                 }
