@@ -166,7 +166,6 @@ impl Signal<'_> {
 
                // check if user wants graph
                if *draw && (channel.path == witch_channel){
-                 fg.show().unwrap();
 
                  println!("channel name {:?} \n\
                            samples = {:?} ~ duration = {:?} s ~ \
@@ -175,18 +174,24 @@ impl Signal<'_> {
                           &time.len(),
                           time.last().copied(),
                           fs as f32);
+                 // TODO attempt to save interactive semi-done!!
+                 fg.show().unwrap();
+
                }
 
                else{
                  continue;}
 
-               // TODO attempt to save interactive semi-done!!
-               let f_type: &str = ".png";
-               let _save_to_file = format!("{}{}",
-                                           plot_title,
-                                           f_type)
-               .replace(' ', "_")
-               .replace('/',"");
+                 // let f_type: &str = ".png";
+                 // let _save_to_file = format!("{}{}",
+                 //                             plot_title,
+                 //                             f_type)
+                   // .replace(' ', "_")
+                   // .replace('/',"");
+                 // unsafe{
+                 // fg.save_to_png(_save_to_file, 800, 600).unwrap_unchecked();
+                 // }
+
         };
       }
     });

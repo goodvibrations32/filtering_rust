@@ -121,6 +121,15 @@ pub fn gui_single_file(data_channel: String,
                 }
             }
         }
-        false => println!("You canceled the opening operation!\n Thanks "),
+        false => if MessageDialog::new()
+            .set_text("Do you wand to open another file ?")
+            .set_type(MessageType::Info)
+            .show_confirm()
+            .unwrap(){
+                gui_single_file(data_channel, true)
+        }else{
+            println!("You canceled the opening operation!\n Thanks ");
+        }
+            // println!("You canceled the opening operation!\n Thanks "),
     }
 }

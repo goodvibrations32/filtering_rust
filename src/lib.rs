@@ -3,8 +3,8 @@ use tdms::TDMSFile;
 
 #[derive(Debug)]
 pub struct FilterMods{
-    pub order: u32,
-    pub cutoff_low: f64,
+  pub order: u32,
+  pub cutoff_low: f64,
 }
 
 #[derive(Debug)]
@@ -17,7 +17,7 @@ pub struct Signal <'a> {
 #[cfg(test)]
 mod tests{
 
-    use std::path::Path;
+  use std::path::Path;
 
   use super::*;
   #[test]
@@ -35,19 +35,19 @@ mod tests{
     assert_eq!(signal.inv_state_exp, "compressed air");
     assert_eq!(signal.ws, "0");
     assert_eq!(signal.data.groups().get(0),
-               Some(&String::from("Wind Measurement")))
+               Some(&String::from("Wind Measurement")));
 
   }
 
-    #[test]
-    fn check_filter_const(){
-        let me_butter = FilterMods{
-            order: 2,
-            cutoff_low: 200.,
-        };
-        assert_eq!(me_butter.order, 2);
-        assert_eq!(me_butter.cutoff_low, 200.)
-    }
+  #[test]
+  fn check_filter_const(){
+    let me_butter = FilterMods{
+      order: 2,
+      cutoff_low: 200.,
+    };
+    assert_eq!(me_butter.order, 2);
+    assert_eq!(me_butter.cutoff_low, 200.)
+  }
   #[ignore = "For later"]
   fn _check_the_time_ops() -> ! {
     todo!("Sould test the filtering opperation")
