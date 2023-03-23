@@ -48,8 +48,8 @@ mod tests{
         assert_eq!(me_butter.order, 2);
         assert_eq!(me_butter.cutoff_low, 200.)
     }
-  #[test]
-  fn check_the_time_ops() -> ! {
+  #[ignore = "For later"]
+  fn _check_the_time_ops() -> ! {
     todo!("Sould test the filtering opperation")
   }
 }
