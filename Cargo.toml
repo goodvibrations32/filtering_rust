@@ -3,6 +3,7 @@ name = "spectrum_in_rust"
 version = "0.1.1"
 edition = "2021"
 rust-version = "1.70"
+license = "MIT"
 # [toolchain]
 # channel = "nightly"
 
