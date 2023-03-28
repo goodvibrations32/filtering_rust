@@ -31,14 +31,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
                                           "🧪 Do you know the channel name of the dataset? 🧪 \n\
                                            If yes, remember ... \n\
                                            Have them in the latest naming \n\
-                                           conventon folders to \n\
-                                           plot a time domain representation\n\
-                                           of the recording.\n\
-                                           (The default script plots: \n\
-                                           - Wind2 channel and the speed \n\
-                                           from the file you will select \n\
-                                           in a legend in the plot.) \n\
-                                           If you dont know dont worry we cover that !! \n\
+                                           conventon folders to \
+                                           plot the recording.\n \n\
+                                           By default 'Wind2' channel will be plotted!! \n\
+                                           If you dont know the channel name you want to see we cover that !! \n \n\
                                            Choose `NO` and have some info in the terminal \n\
                                            about the file you will choose. 
                                            ").show_confirm().unwrap();
