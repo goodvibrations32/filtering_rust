@@ -80,7 +80,7 @@ impl RawData for tdms::TDMSFile<'_> {
 }
 
 impl Signal <'_> {
-  pub fn spectra(&self) {
+  pub fn spectra(&self, title: String) {
     let raw_signal: Vec<f64> = RawData::gime_data(self.data.clone());
     let fs = raw_signal.len() as f64 / 7.;
     let welch: SpectralDensity<f64> =
@@ -89,17 +89,20 @@ impl Signal <'_> {
     let _now = Instant::now();
     let sdens = welch.periodogram();
     let mut fig = Figure::new();
-    fig.set_title("Welch Spectral Density")
+    fig.set_title(&format!("Welch Spectral Density of {:?} measurements",
+                           title))
        .axes2d()
-       .set_x_label("Some", &[])
+       .set_x_label("Frequencies [Hz]", &[])
        .set_x_log(Some(10.))
-       .set_y_label("Some 2", &[])
+       .set_y_label("Spectral density [s^2/Hz]", &[])
        .set_y_log(Some(10.))
        .lines(
          sdens.frequency()
               .into_iter(),
          &(*sdens),
-         &[Caption ("Spectral density"),
+         &[Caption (&format!(" Inv {:1?} Ws {:2?}",
+                             self.inv_state_exp,
+                             self.ws.to_string())),
            Color("blue"),
            LineWidth(0.9)] );
     fig.show().unwrap();
@@ -235,7 +238,7 @@ impl Signal<'_> {
                                                .show_confirm();
                  match yes.unwrap() {
                    true => {
-                     self.spectra()
+                     self.spectra(plot_title.to_string())
                    }
                    false => {
                      continue;
