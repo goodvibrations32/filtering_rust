@@ -1,5 +1,3 @@
-use std::time::Instant;
-
 use itertools::Itertools;
 extern crate tdms;
 use native_dialog::{MessageDialog, MessageType};
@@ -86,7 +84,7 @@ impl Signal <'_> {
     let welch: SpectralDensity<f64> =
       SpectralDensity::<f64>::builder(&raw_signal, fs).build();
 
-    let _now = Instant::now();
+
     let sdens = welch.periodogram();
     let mut fig = Figure::new();
     fig.set_title(&format!("Welch Spectral Density of {:?} measurements",
@@ -233,7 +231,10 @@ impl Signal<'_> {
                  // TODO attempt to save interactive semi-done!!
                  fg.show().unwrap();
 
-                 let yes = MessageDialog::new().set_text("Would you like to plot also Spectral Density of the signal?")
+                 let yes = MessageDialog::new().set_text("Would you like to \
+                                                          plot also the Spectral \
+                                                          Density of the \
+                                                          signal?")
                                                .set_type(MessageType::Info)
                                                .show_confirm();
                  match yes.unwrap() {
