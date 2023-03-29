@@ -34,7 +34,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
                                            conventon folders to \
                                            plot the recording.\n \n\
                                            By default 'Wind2' channel will be plotted!! \n\
-                                           If you dont know the channel name and you want to see we cover that !! \n \n\
+                                           If you dont know the channel name and you want some \n\
+                                           information we cover that !! \n \n\
                                            Choose `NO` and have some info in the terminal \n\
                                            about the file you will choose. 
                                            ").show_confirm().unwrap();
