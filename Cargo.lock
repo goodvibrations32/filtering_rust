@@ -463,10 +463,17 @@ dependencies = [
  "native-dialog",
  "path-slash",
  "rustfft",
+ "stats",
  "svg",
  "tdms",
  "welch-sde",
 ]
+
+[[package]]
+name = "stats"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "41eeb5d03a57e61b273abce8ffc01c56d145176c793c1447ea0eed1fb8d43d5a"
 
 [[package]]
 name = "strength_reduce"
