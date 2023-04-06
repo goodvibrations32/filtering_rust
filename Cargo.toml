@@ -21,6 +21,7 @@ path-slash = "0.2.1"
 tdms = "0.3.0"
 welch-sde = "0.1.0"
 rustfft = "6.1.0"
+stats = "0.0.1"
 [depenencies.native-dialog]
 path = "../.."
 features = ["windows_dpi_awareness", "windows_visual_styles"]
