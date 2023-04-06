@@ -29,9 +29,21 @@ impl FilterMods {
 }
 impl FilterMods {
     pub fn _simple_highpass (self,
-                            _sig: Vec<f64>,
-                            _sigfs: f64)
-                            -> Result<Vec<f64>, Box<dyn std::error::Error>>{
+                             _sig: Vec<f64>,
+                             _sigfs: f64)
+                             -> Result<Vec<f64>, Box<dyn std::error::Error>>{
         todo!("Have to implement a simple high pass butterworth for general use")
+    }
+}
+#[test]
+fn lets_be_sure_for_filters(){
+    let check = FilterMods{
+        order:1,
+        cutoff_low:2.
+    };
+    let x = vec![1., 2., 3.];
+    match check.simple_lowpass(x, 8.).is_ok(){
+        true => println!("The filter works as intended"),
+        false => panic!()
     }
 }
